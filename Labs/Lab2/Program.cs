@@ -18,5 +18,9 @@ namespace Lab2
                 return x + y;
             }
         
+        String concat(String a, String b, String c)
+        {
+            return a + b + c;
+        }
     }
 }
