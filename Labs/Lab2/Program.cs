@@ -13,12 +13,18 @@ namespace Lab2
             Console.WriteLine("Hello, world.");
 
         }
+
             int add(int x, int y)
             {
                 return x + y;
             }
         
-        String concat(String a, String b, String c)
+        String concat2(String a, String b)
+        {
+            return a + b;
+        }
+            
+        String concat3(String a, String b, String c)
         {
             return a + b + c;
         }
