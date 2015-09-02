@@ -13,10 +13,16 @@ namespace Lab2
             Console.WriteLine("Hello, world.");
 
         }
-            int add(int x, int y)
-            {
-                return x + y;
-            }
+
+        int add(int x, int y)
+        {
+            return x + y;
+        }
         
+        String concat(String a, String b)
+        {
+            return a + b;
+        }
+            
     }
 }
