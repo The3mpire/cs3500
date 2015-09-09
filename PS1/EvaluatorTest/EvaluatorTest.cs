@@ -1,25 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FormulaEvaluator;
 
 namespace EvaluatorTest
 {
-    class EvaluatorTest
+    [TestClass]
+    public class EvaluatorTest
+
     {
-        static void Main(string[] args)
+        /// <summary>
+        /// A dictionary function that holds the values of variables
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public int Dictionary(string s)
         {
-            String s = "Hello\t I am              a \tdog\n.";
-            Console.WriteLine(s);
-            Console.Read();
-            s = s.Replace(" ", String.Empty);
-            s = s.Replace("\t", String.Empty);
-            s = s.Replace("\n", String.Empty);
-            Console.WriteLine(s);
-            Console.Read();
-            Console.Read();
+            return -2;
+        }
+
+        int ans;
+
+        [TestMethod]
+        public void TestDivision()
+        {
+            ans = Evaluator.Evaluate("8 / 2", Dictionary);
+            Assert.AreEqual(7, ans);
 
         }
     }
