@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 /// </summary>
 namespace FormulaEvaluator
 {
+    //TODO deal with non negative integers
     /// <summary>
     /// A class meant to evaluate equations placed in String form
     /// </summary>
@@ -34,7 +35,7 @@ namespace FormulaEvaluator
         /// <returns>the value of the infix notation equation</returns>
         public static int Evaluate(string exp, Lookup variableEvaluator)
         {
-            // Stacks
+            
             Stack<int> valueStack = new Stack<int>();
             Stack<String> symbolStack = new Stack<String>();
             // equation variables
@@ -45,10 +46,22 @@ namespace FormulaEvaluator
             Regex varCheck = new Regex(@"^[A-Za-z]+[0-9]+$");
             string token = "";
 
+            //TODO wrap in try catch to remove the if's
+            // check if exp is empty or null
+            if(exp.Length == 0 || exp == null)
+            {
+                throw new ArgumentException();
+            }
 
             //removed the whitespace from the passed example
-            removeWhiteSpace(exp);
+            exp = removeWhiteSpace(exp);
             string[] substrings = Regex.Split(exp, "(\\()|(\\))|(-)|(\\+)|(\\*)|(/)");
+
+            // Checks to see if the string is empty before looping through it
+            if(substrings.Length == 0)
+            {
+                throw new ArgumentException();
+            }
 
             //loops through the entire array and analyzes the symbols to put on
             //the correct stacks
@@ -60,7 +73,7 @@ namespace FormulaEvaluator
                 // token is an integer
                 if (int.TryParse(token, out parsedInt))
                 {
-                    if(symbolStack.Count() < 1)
+                    if (symbolStack.Count() < 1)
                     {
                         valueStack.Push(parsedInt);
                     }
@@ -112,7 +125,7 @@ namespace FormulaEvaluator
                     {
                         throw new ArgumentException();
                     }
-                    
+
                     //Proceed as above, using the looked-up value of t instead of t
                 }
 
@@ -123,7 +136,7 @@ namespace FormulaEvaluator
                     //the operator stack once. Apply the popped operator to the popped numbers. Push
                     //the result onto the value stack. Next, push t onto the operator stack
 
-                    if(valueStack.Count <= 1)
+                    if (valueStack.Count <= 1)
                     {
                         throw new ArgumentException();
                     }
@@ -161,40 +174,58 @@ namespace FormulaEvaluator
                     symbolStack.Push(token);
                 }
 
-            }
+            }//end of for loop
 
             //Operator stack is empty but valueStack has more than one token
-            if(symbolStack.Count == 0 && valueStack.Count != 1)
+            if (symbolStack.Count == 0 && valueStack.Count != 1)
             {
-                
                 throw new ArgumentException();
             }
 
-            //Operator stack is not empty but valueStack contains more or less than two tokens
-            else if(symbolStack.Count > 0 && valueStack.Count != 2)
+            //Operator stack is not empty 
+            else if (symbolStack.Count > 0)
             {
-                throw new ArgumentException();
-                //There should be exactly one operator on the operator stack, and it should be either + or -. 
-                //There should be exactly two values on the value stack. Apply the operator to the two values 
-                //and report the result as the value of the expression
+                //valueStack contains more or less than two tokens
+                if (valueStack.Count != 2)
+                {
+                    throw new ArgumentException();
+                }
+                //There should be exactly one operator on the operator stack, and it should be either +
+                if (symbolStack.Peek() == "+")
+                {
+                    firstVal = valueStack.Pop();
+                    secondVal = valueStack.Pop();
+                    op = symbolStack.Pop();
+                    valueStack.Push(firstVal + secondVal);
+                }
+                // or -. 
+                else if (symbolStack.Peek() == "-")
+                {
+                    firstVal = valueStack.Pop();
+                    secondVal = valueStack.Pop();
+                    op = symbolStack.Pop();
+                    valueStack.Push(firstVal - secondVal);
+                }
+                // the operator stack held a different value than + or -
+                else
+                {
+                    throw new ArgumentException();
+                }
             }
 
-
-            return;
-
-
-
+            return valueStack.Pop();
         }
 
         /// <summary>
-        /// 
+        /// removes the all the white space from a string (tabs, new lines, and spaces)
         /// </summary>
         /// <param name="s"></param>
-        private static void removeWhiteSpace(String s)
+        private static String removeWhiteSpace(string s)
         {
             s = s.Replace(" ", String.Empty);
             s = s.Replace("\t", String.Empty);
             s = s.Replace("\n", String.Empty);
+            return s;
         }
     }
 }

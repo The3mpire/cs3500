@@ -21,11 +21,17 @@ namespace EvaluatorTest
         int ans;
 
         [TestMethod]
-        public void TestDivision()
+        public void TestDivisionBasic()
         {
             ans = Evaluator.Evaluate("8 / 2", Dictionary);
-            Assert.AreEqual(7, ans);
+            Assert.AreEqual(4, ans);
+        }
 
+        [TestMethod]
+        public void TestMultiplicationBasic()
+        {
+            ans = Evaluator.Evaluate("2*\t0", Dictionary);
+            Assert.AreEqual(0, ans);
         }
     }
 }
